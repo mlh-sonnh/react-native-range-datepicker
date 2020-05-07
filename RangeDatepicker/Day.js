@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableWithoutFeedback, Dimensions } from 'react-native';
 import moment from 'moment';
-import LinearGradient from 'react-native-linear-gradient';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
@@ -183,50 +182,40 @@ export default class Day extends React.Component {
                             maxHeight: 30,
                         }}
                     >
-                        <LinearGradient
-                            start={{ x: 0.0, y: 0 }}
-                            end={{ x: 1, y: 0 }}
-                            locations={[0.2, 0.8, 1]}
-                            colors={['red', 'green', 'white']}
+                        <Text
+                            style={{
+                                ...textDayStyle,
+                                textAlign: 'center',
+                                backgroundColor: 'transparent',
+                                fontSize: Math.floor(DEVICE_WIDTH / 26),
+                            }}
                         >
-                            <Text
+                            {moment(day.date, 'YYYYMMDD').date()}
+                        </Text>
+                        {day.date == moment().format('YYYYMMDD') ? (
+                            <View
                                 style={{
-                                    ...textDayStyle,
-                                    textAlign: 'center',
+                                    position: 'absolute',
+                                    top: -Math.floor(DEVICE_WIDTH / 8),
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    justifyContent: 'center',
                                     backgroundColor: 'transparent',
-                                    fontSize: Math.floor(DEVICE_WIDTH / 26),
                                 }}
                             >
-                                {moment(day.date, 'YYYYMMDD').date()}
-                            </Text>
-                            {day.date == moment().format('YYYYMMDD') ? (
-                                <View
+                                <Text
                                     style={{
-                                        position: 'absolute',
-                                        top: -Math.floor(DEVICE_WIDTH / 8),
-                                        bottom: 0,
-                                        left: 0,
-                                        right: 0,
-                                        justifyContent: 'center',
-                                        backgroundColor: 'transparent',
+                                        fontSize: Math.floor(DEVICE_WIDTH / 9),
+                                        fontWeight: 'bold',
+                                        color: dayProps.selectedBackgroundColor,
+                                        textAlign: 'right',
                                     }}
                                 >
-                                    <Text
-                                        style={{
-                                            fontSize: Math.floor(
-                                                DEVICE_WIDTH / 9
-                                            ),
-                                            fontWeight: 'bold',
-                                            color:
-                                                dayProps.selectedBackgroundColor,
-                                            textAlign: 'right',
-                                        }}
-                                    >
-                                        .
-                                    </Text>
-                                </View>
-                            ) : null}
-                        </LinearGradient>
+                                    .
+                                </Text>
+                            </View>
+                        ) : null}
                     </View>
                 </TouchableWithoutFeedback>
             );
