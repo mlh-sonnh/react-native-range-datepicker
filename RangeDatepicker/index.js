@@ -1,10 +1,9 @@
-'use strict';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Text, View, FlatList, StyleSheet, Button } from 'react-native';
+import moment from 'moment';
 import Month from './Month';
 // import styles from './styles';
-import moment from 'moment';
 
 export default class RangeDatepicker extends Component {
     constructor(props) {
@@ -38,6 +37,7 @@ export default class RangeDatepicker extends Component {
         placeHolderUntil: 'Until Date',
         selectedBackgroundColor: 'green',
         selectedTextColor: 'white',
+        selectedBetweenColor: '#FFEDE7',
         todayColor: 'green',
         startDate: '',
         untilDate: '',
@@ -55,6 +55,7 @@ export default class RangeDatepicker extends Component {
         },
         showSelectionInfo: true,
         showButton: true,
+        specialDays: [],
     };
 
     static propTypes = {
@@ -79,12 +80,14 @@ export default class RangeDatepicker extends Component {
         placeHolderUntil: PropTypes.string,
         selectedBackgroundColor: PropTypes.string,
         selectedTextColor: PropTypes.string,
+        selectedBetweenColor: PropTypes.string,
         todayColor: PropTypes.string,
         infoText: PropTypes.string,
         infoStyle: PropTypes.object,
         infoContainerStyle: PropTypes.object,
         showSelectionInfo: PropTypes.bool,
         showButton: PropTypes.bool,
+        specialDays: PropTypes.array,
     };
 
     componentWillReceiveProps(nextProps) {
@@ -128,7 +131,7 @@ export default class RangeDatepicker extends Component {
         const { startDate, untilDate, availableDates } = this.state;
 
         if (availableDates && availableDates.length > 0) {
-            //select endDate condition
+            // select endDate condition
             if (startDate && !untilDate) {
                 for (
                     let i = startDate.format('YYYYMMDD');
@@ -138,24 +141,27 @@ export default class RangeDatepicker extends Component {
                     if (
                         availableDates.indexOf(i) == -1 &&
                         startDate.format('YYYYMMDD') != i
-                    )
+                    ) {
                         return true;
+                    }
                 }
             }
-            //select startDate condition
-            else if (availableDates.indexOf(date.format('YYYYMMDD')) == -1)
+            // select startDate condition
+            else if (availableDates.indexOf(date.format('YYYYMMDD')) == -1) {
                 return true;
+            }
         }
 
         return false;
     }
 
     getMonthStack() {
-        let res = [];
+        const res = [];
         const { maxMonth, initialMonth, isHistorical } = this.props;
         let initMonth = moment();
-        if (initialMonth && initialMonth != '')
+        if (initialMonth && initialMonth != '') {
             initMonth = moment(initialMonth, 'YYYYMM');
+        }
 
         for (let i = 0; i < maxMonth; i++) {
             res.push(
@@ -190,11 +196,13 @@ export default class RangeDatepicker extends Component {
             ignoreMinDate,
             minDate,
             maxDate,
+            selectedBetweenColor,
+            specialDays,
         } = this.props;
         let { availableDates, startDate, untilDate } = this.state;
 
         if (availableDates && availableDates.length > 0) {
-            availableDates = availableDates.filter(function (d) {
+            availableDates = availableDates.filter((d) => {
                 if (d.indexOf(month) >= 0) return true;
             });
         }
@@ -212,8 +220,10 @@ export default class RangeDatepicker extends Component {
                     selectedBackgroundColor,
                     selectedTextColor,
                     todayColor,
+                    selectedBetweenColor,
                 }}
                 month={month}
+                specialDays={specialDays}
             />
         );
     }
@@ -306,23 +316,30 @@ export default class RangeDatepicker extends Component {
                     </View>
                 )}
                 <View style={styles.dayHeader}>
-                    {this.props.dayHeadings.map((day, i) => {
-                        return (
-                            <Text
-                                style={{ width: '14.28%', textAlign: 'center' }}
-                                key={i}
-                            >
-                                {day}
-                            </Text>
-                        );
-                    })}
+                    {this.props.dayHeadings.map((day, i) => (
+                        <Text
+                            style={
+                                i === 0 || i === 6
+                                    ? {
+                                          width: '14.28%',
+                                          textAlign: 'center',
+                                          color: this.props
+                                              .selectedBackgroundColor,
+                                      }
+                                    : { width: '14.28%', textAlign: 'center' }
+                            }
+                            key={i}
+                        >
+                            {day}
+                        </Text>
+                    ))}
                 </View>
                 <FlatList
                     style={{ flex: 1 }}
                     data={this.getMonthStack()}
-                    renderItem={({ item, index }) => {
-                        return this.handleRenderRow(item, index);
-                    }}
+                    renderItem={({ item, index }) =>
+                        this.handleRenderRow(item, index)
+                    }
                     keyExtractor={(item, index) => index.toString()}
                     showsVerticalScrollIndicator={false}
                 />
@@ -350,8 +367,10 @@ const styles = StyleSheet.create({
     dayHeader: {
         flexDirection: 'row',
         borderBottomWidth: 1,
+        borderBottomColor: '#E5E5E5',
         paddingBottom: 10,
         paddingTop: 10,
+        paddingHorizontal: 5,
     },
     buttonWrapper: {
         paddingVertical: 10,

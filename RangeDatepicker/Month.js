@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
 import moment from 'moment';
 import DayRow from './DayRow';
+
+const DEVICE_WIDTH = Dimensions.get('window').width;
 
 export default class Month extends React.Component {
     constructor(props) {
@@ -18,42 +20,48 @@ export default class Month extends React.Component {
         if (
             nextProps.startDate &&
             nextProps.startDate.format('YYYYMM') == nextProps.month
-        )
+        ) {
             return true;
+        }
 
         if (
             nextProps.untilDate &&
             nextProps.untilDate.format('YYYYMM') == nextProps.month
-        )
+        ) {
             return true;
+        }
 
         if (
             this.props.startDate &&
             this.props.startDate.format('YYYYMM') == nextProps.month
-        )
+        ) {
             return true;
+        }
 
         if (
             this.props.untilDate &&
             this.props.untilDate.format('YYYYMM') == nextProps.month
-        )
+        ) {
             return true;
+        }
 
         if (
             nextProps.startDate &&
             nextProps.untilDate &&
             nextProps.startDate.format('YYYYMM') < nextProps.month &&
             nextProps.untilDate.format('YYYYMM') > nextProps.month
-        )
+        ) {
             return true;
+        }
 
         if (
             this.props.untilDate &&
             this.props.startDate &&
             this.props.startDate.format('YYYYMM') < nextProps.month &&
             this.props.untilDate.format('YYYYMM') > nextProps.month
-        )
+        ) {
             return true;
+        }
 
         return false;
     }
@@ -138,8 +146,9 @@ export default class Month extends React.Component {
                         untilDate &&
                         untilDate.format('YYYYMMDD') >
                             currDate.format('YYYYMMDD')
-                    )
+                    ) {
                         dayObject.type = 'between';
+                    }
 
                     dayObject.date = currDate.clone().format('YYYYMMDD');
                     dayColumn.push(dayObject);
@@ -152,8 +161,9 @@ export default class Month extends React.Component {
                             currDate.format('YYYYMMDD') &&
                         untilDate.format('YYYYMMDD') >=
                             currDate.format('YYYYMMDD')
-                    )
+                    ) {
                         dayObject.type = 'between';
+                    }
 
                     dayColumn.push(dayObject);
                 }
@@ -166,12 +176,20 @@ export default class Month extends React.Component {
     }
 
     render() {
-        const { month, dayProps } = this.props;
+        const { month, dayProps, specialDays } = this.props;
         const dayStack = this.getDayStack(moment(month, 'YYYYMM'));
+        const monthInfos = specialDays.filter(
+            (r) => moment(r.date).format('YYYYMM') === month
+        );
         return (
-            <View>
+            <View style={{ marginHorizontal: 5 }}>
                 <Text
-                    style={{ fontSize: 14, padding: 14, alignSelf: 'center' }}
+                    style={{
+                        fontSize: 14,
+                        padding: 14,
+                        alignSelf: 'center',
+                        fontWeight: '600',
+                    }}
                 >
                     {moment(month, 'YYYYMM').format('MMMM YYYY')}
                 </Text>
@@ -182,22 +200,53 @@ export default class Month extends React.Component {
                             dayProps={dayProps}
                             key={i}
                             onSelectDate={this.props.onSelectDate}
+                            monthInfos={monthInfos}
                         />
                     ))}
                 </View>
-                <View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text>{'\u2022'}</Text>
-                        <Text style={{ flex: 1, paddingLeft: 5 }}>abc</Text>
+                {monthInfos.length > 0 && (
+                    <View
+                        style={{
+                            marginHorizontal: Math.floor(DEVICE_WIDTH / 21),
+                            marginBottom: 14,
+                            marginTop: 7,
+                        }}
+                    >
+                        {monthInfos.map((r, i) => (
+                            <View
+                                key={i}
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        fontSize: 18,
+                                        color: dayProps.selectedBackgroundColor,
+                                    }}
+                                >
+                                    {'\u2022'}
+                                </Text>
+                                <Text
+                                    style={{
+                                        flex: 1,
+                                        paddingLeft: 5,
+                                        fontSize: 12,
+                                        textAlignVertical: 'center',
+                                    }}
+                                >
+                                    {r.title}
+                                </Text>
+                            </View>
+                        ))}
                     </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text>{'\u2022'}</Text>
-                        <Text style={{ flex: 1, paddingLeft: 5 }}>xyz</Text>
-                    </View>
-                </View>
+                )}
                 <View
                     style={{
-                        borderBottomColor: 'grey',
+                        marginHorizontal: Math.floor(DEVICE_WIDTH / 23),
+                        borderBottomColor: '#E5E5E5',
                         borderBottomWidth: 1,
                     }}
                 />

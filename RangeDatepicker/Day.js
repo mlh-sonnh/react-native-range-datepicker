@@ -16,49 +16,59 @@ export default class Day extends React.Component {
     }
 
     render() {
-        const { day, dayProps } = this.props;
+        const { day, dayProps, monthInfos } = this.props;
         let dayStyle = {
             backgroundColor: 'transparent',
             position: 'relative',
             width: '14.28%',
         };
-        console.log(day.date, moment(day.date, 'YYYYMMDD').isoWeekday());
         let textDayStyle = [6, 7].includes(
             moment(day.date, 'YYYYMMDD').isoWeekday()
         )
-            ? { color: 'red' }
-            : { color: 'black' };
+            ? { color: dayProps.selectedBackgroundColor, fontWeight: '600' }
+            : { color: 'black', fontWeight: '600' };
 
         switch (day.type) {
             case 'single':
                 dayStyle = {
                     backgroundColor: dayProps.selectedBackgroundColor,
-                    borderRadius: Math.floor(DEVICE_WIDTH / 7),
                     width: '14.28%',
                 };
-                textDayStyle = { color: dayProps.selectedTextColor };
+                textDayStyle = {
+                    color: dayProps.selectedTextColor,
+                    fontWeight: '600',
+                };
                 break;
             case 'first':
                 dayStyle = {
                     backgroundColor: dayProps.selectedBackgroundColor,
                     width: '14.28%',
                 };
-                textDayStyle = { color: dayProps.selectedTextColor };
+                textDayStyle = {
+                    color: dayProps.selectedTextColor,
+                    fontWeight: '600',
+                };
                 break;
             case 'last':
                 dayStyle = {
                     backgroundColor: dayProps.selectedBackgroundColor,
                     width: '14.28%',
                 };
-                textDayStyle = { color: dayProps.selectedTextColor };
+                textDayStyle = {
+                    color: dayProps.selectedTextColor,
+                    fontWeight: '600',
+                };
                 break;
             case 'between':
-                dayStyle = { backgroundColor: 'red', width: '14.28%' };
-                textDayStyle = { color: dayProps.selectedTextColor };
+                dayStyle = {
+                    backgroundColor: dayProps.selectedBetweenColor,
+                    width: '14.28%',
+                    fontWeight: '600',
+                };
                 break;
             case 'disabled':
             case 'blockout':
-                textDayStyle = { color: '#ccc' };
+                textDayStyle = { color: '#ccc', fontWeight: '600' };
             default:
                 break;
         }
@@ -192,7 +202,10 @@ export default class Day extends React.Component {
                         >
                             {moment(day.date, 'YYYYMMDD').date()}
                         </Text>
-                        {day.date == moment().format('YYYYMMDD') ? (
+                        {monthInfos.find(
+                            (r) =>
+                                moment(r.date).format('YYYYMMDD') === day.date
+                        ) && !['first', 'last', 'single'].includes(day.type) ? (
                             <View
                                 style={{
                                     position: 'absolute',
@@ -206,7 +219,7 @@ export default class Day extends React.Component {
                             >
                                 <Text
                                     style={{
-                                        fontSize: Math.floor(DEVICE_WIDTH / 9),
+                                        fontSize: Math.floor(DEVICE_WIDTH / 12),
                                         fontWeight: 'bold',
                                         color: dayProps.selectedBackgroundColor,
                                         textAlign: 'right',
@@ -227,6 +240,7 @@ export default class Day extends React.Component {
                         ...dayStyle,
                         height: Math.floor(DEVICE_WIDTH / 10),
                         justifyContent: 'center',
+                        maxHeight: 30,
                     }}
                 >
                     <Text
