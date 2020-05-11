@@ -182,7 +182,7 @@ export default class Month extends React.Component {
             (r) => moment(r.date).format('YYYYMM') === month
         );
         return (
-            <View style={{ marginHorizontal: 5 }}>
+            <View style={{ paddingHorizontal: 5, backgroundColor: '#f4f4f4' }}>
                 <Text
                     style={{
                         fontSize: 14,

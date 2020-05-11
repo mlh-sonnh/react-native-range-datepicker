@@ -209,25 +209,15 @@ export default class Day extends React.Component {
                             <View
                                 style={{
                                     position: 'absolute',
-                                    top: -Math.floor(DEVICE_WIDTH / 8),
-                                    bottom: 0,
-                                    left: 0,
-                                    right: 0,
-                                    justifyContent: 'center',
-                                    backgroundColor: 'transparent',
+                                    top: 3,
+                                    right: 7,
+                                    width: 4,
+                                    height: 4,
+                                    backgroundColor: 'red',
+                                    borderRadius: 4,
+                                    overflow: 'hidden',
                                 }}
-                            >
-                                <Text
-                                    style={{
-                                        fontSize: Math.floor(DEVICE_WIDTH / 12),
-                                        fontWeight: 'bold',
-                                        color: dayProps.selectedBackgroundColor,
-                                        textAlign: 'right',
-                                    }}
-                                >
-                                    .
-                                </Text>
-                            </View>
+                            />
                         ) : null}
                     </View>
                 </TouchableWithoutFeedback>
