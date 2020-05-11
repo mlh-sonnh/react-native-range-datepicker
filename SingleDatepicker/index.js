@@ -42,6 +42,7 @@ export default class RangeDatepicker extends Component {
             alignSelf: 'flex-end',
         },
         specialDays: [],
+        selectedDate: {},
     };
 
     static propTypes = {
@@ -61,6 +62,7 @@ export default class RangeDatepicker extends Component {
         infoStyle: PropTypes.object,
         infoContainerStyle: PropTypes.object,
         specialDays: PropTypes.array,
+        selectedDate: PropTypes.object,
     };
 
     componentWillReceiveProps(nextProps) {
@@ -77,8 +79,9 @@ export default class RangeDatepicker extends Component {
         const res = [];
         const { maxMonth, initialMonth } = this.props;
         let initMonth = moment();
-        if (initialMonth && initialMonth != '')
+        if (initialMonth && initialMonth != '') {
             initMonth = moment(initialMonth, 'YYYYMM');
+        }
 
         for (let i = 0; i < maxMonth; i++) {
             res.push(initMonth.clone().add(i, 'month').format('YYYYMM'));

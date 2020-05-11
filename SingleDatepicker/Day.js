@@ -23,7 +23,6 @@ export default class Day extends React.Component {
             width: '14.28%',
         };
         let textDayStyle = { color: 'black', fontWeight: '600' };
-        console.log(day.type);
         switch (day.type) {
             case 'disabled':
             case 'blockout':
