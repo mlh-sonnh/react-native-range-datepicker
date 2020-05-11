@@ -56,6 +56,7 @@ export default class Day extends React.Component {
                                 ...dayStyle,
                                 height: Math.floor(DEVICE_WIDTH / 10),
                                 justifyContent: 'center',
+                                maxHeight: 30,
                             }}
                         >
                             <Text
@@ -111,6 +112,7 @@ export default class Day extends React.Component {
                                 ...dayStyle,
                                 height: Math.floor(DEVICE_WIDTH / 10),
                                 justifyContent: 'center',
+                                maxHeight: 30,
                             }}
                         >
                             <Text
@@ -202,6 +204,7 @@ export default class Day extends React.Component {
                         ...dayStyle,
                         height: Math.floor(DEVICE_WIDTH / 10),
                         justifyContent: 'center',
+                        maxHeight: 30,
                     }}
                 >
                     <Text
